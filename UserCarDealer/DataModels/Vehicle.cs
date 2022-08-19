@@ -1,4 +1,7 @@
-﻿namespace UserCarDealer.DataModels
+﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
+namespace UserCarDealer.DataModels
 {
     public class Vehicle
     {
@@ -11,6 +14,7 @@
         public int Course { get; set; }
         public bool IsAvailable { get; set; }
         public int OwnerCount { get; set; }
+        public ICollection<SellData> SellDataId { get; set; }
 
     }
 }

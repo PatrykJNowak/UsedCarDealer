@@ -10,6 +10,6 @@ namespace UserCarDealer.DataModels
 
         public DbSet<SellData> SellData { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
-        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Customer> Customer { get; set; }
     }
 }
