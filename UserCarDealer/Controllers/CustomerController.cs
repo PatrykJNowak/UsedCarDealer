@@ -73,10 +73,10 @@ namespace UserCarDealer.Controllers
         }
 
         //api/DELETE/{id}
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<int>> DelCustomer([FromServices] IMediator _sender, int id)
+        [HttpDelete("{personalId}")]
+        public async Task<ActionResult<int>> DelCustomer([FromServices] IMediator _sender, string personalId)
         {
-            var resultDelCustomer = await _sender.Send(new DelCustomerCommand());
+            var resultDelCustomer = await _sender.Send(new DelCustomerCommand() { PersonalId = personalId });
             return Ok("Done");
         }
     }
