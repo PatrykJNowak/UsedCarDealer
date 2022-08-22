@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UserCarDealer.Command.VehicleCommand;
+using UserCarDealer.Handlers.VehicleHandlers.Dto;
 using UserCarDealer.Queries.VehicleQueries;
 
 namespace UserCarDealer.Controllers
@@ -22,10 +24,10 @@ namespace UserCarDealer.Controllers
         }
 
         //api/GET/{vin}
-        [HttpGet("{vin}")]
-        public async Task<ActionResult> GetVehicleById([FromServices] IMediator _sender, string vin)
+        [HttpGet("{vinOrId}")]
+        public async Task<ActionResult> GetVehicleById([FromServices] IMediator _sender, string vinOrId)
         {
-            var resultGetVehicleById = await _sender.Send(new GetVehicleByIdQuery() { vin = vin });
+            var resultGetVehicleById = await _sender.Send(new GetVehicleByIdQuery() { vinOrId = vinOrId });
             if (resultGetVehicleById != null)
             {
                 return Ok(resultGetVehicleById);
@@ -33,6 +35,22 @@ namespace UserCarDealer.Controllers
             else
             {
                 return NotFound("Vehicle not found. Check vin");
+            }
+        }
+
+        //api/POST
+        [HttpPost]
+        public async Task<ActionResult> PostVehicle([FromBody] PostVehicleDto postVehicleDto,
+            [FromServices] IMediator _sender)
+        {
+            var resultPostVehicle = await _sender.Send(new PostVehicleCommand() { PostVehicleDto = postVehicleDto });
+            if (resultPostVehicle != 0)
+            {
+                return Ok("Vehicle added witch Id = " + resultPostVehicle);
+            }
+            else
+            {
+                return NotFound("Vehicle with same vin is already exist");
             }
         }
     }
