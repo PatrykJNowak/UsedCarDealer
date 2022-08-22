@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UserCarDealer.Handlers.SellDataHandlers.Dto;
 using UserCarDealer.Queries.SellDataQueries;
+using UserCarDealer.Command.SellDataCommand;
 
 namespace UserCarDealer.Controllers
 {
@@ -21,6 +23,14 @@ namespace UserCarDealer.Controllers
             return Ok(resultGetSellData);
         }
 
-
+        //api/POST
+        [HttpPost]
+        public async Task<ActionResult> PostSellData([FromBody] PostSellDataDto postSellDataDto,
+            [FromServices] IMediator _sender)
+        {
+            var resultSellDataPost =
+                await _sender.Send(new PostSellDataCommand() { PostSellDataDto = postSellDataDto });
+            return Ok(resultSellDataPost);
+        }
     }
 }
