@@ -5,6 +5,6 @@ namespace UserCarDealer.Queries.VehicleQueries
 {
     public class GetVehicleByIdQuery : IRequest<Vehicle>
     {
-        public string vin { get; set; }
+        public string vinOrId { get; set; }
     }
 }

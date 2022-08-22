@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,8 +17,14 @@ namespace UserCarDealer.Handlers.VehicleHandlers
         public async Task<Vehicle> Handle(GetVehicleByIdQuery request, CancellationToken cancellationToken)
         {
             var resultGetVahicleById = _context.Vehicles
-                .FirstOrDefault(x => x.Vin == request.vin);
+                .FirstOrDefault(x => x.Vin == request.vinOrId);
 
+            if (resultGetVahicleById == null)
+            {
+                return _context.Vehicles
+                    .FirstOrDefault(x => x.Id == Int32.Parse(request.vinOrId));
+            }
+            
             return resultGetVahicleById;
         }
     }
