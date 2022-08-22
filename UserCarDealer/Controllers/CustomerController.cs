@@ -24,6 +24,21 @@ namespace UserCarDealer.Controllers
             return Ok(resultsGetCustomer);
         }
         
+        //api/GET/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetCustomerById([FromServices] IMediator _sender, int id)
+        {
+            var resultGetCustomerById = await _sender.Send(new GetCustomerByIdQuery() {Id = id} );
+            if (resultGetCustomerById != null)
+            {
+                return Ok(resultGetCustomerById);
+            }
+            else
+            {
+                return NotFound("Custumer not found. Check customer Id");
+            }
+        }
+
         //api/POST
         [HttpPost]
         public async Task<ActionResult> PostCustomer([FromBody] PostCustomerDto postCustomerDto,
