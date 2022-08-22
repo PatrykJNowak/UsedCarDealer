@@ -16,7 +16,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Command\VehicleCommand" />
       <Folder Include="Controllers" />
+      <Folder Include="Handlers\VehicleHandlers\Dto" />
     </ItemGroup>
 
 </Project>
