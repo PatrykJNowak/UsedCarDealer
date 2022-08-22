@@ -39,7 +39,7 @@ namespace UserCarDealer.Controllers
                 return NotFound("Check input");
             }
         }
-        
+
         //api/GET/{customer:id}
         [HttpGet("Id/{Id}")]
         public async Task<ActionResult> GetSellDataByCustomerId([FromServices] IMediator _sender, int Id)
@@ -65,12 +65,29 @@ namespace UserCarDealer.Controllers
                 await _sender.Send(new PostSellDataCommand() { PostSellDataDto = postSellDataDto });
             return Ok(resultSellDataPost);
         }
-        
+
+        //api/PUT
+        [HttpPut]
+        public async Task<ActionResult> PutSellData([FromBody] PutSellDataDto putSellDataDto,
+            [FromServices] IMediator _sender)
+        {
+            var resultPutSellData = await _sender.Send(new PutSellDataCommand() { PutSellDataDto = putSellDataDto });
+            if (resultPutSellData != 0)
+            {
+                return Ok("Done");
+            }
+            else
+            {
+                return NotFound("Vehicle not found. Check vin");
+            }
+        }
+
+
         //api/DELETE
         [HttpDelete("DelId/{Id}")]
         public async Task<ActionResult> DelSellData([FromServices] IMediator _sender, int Id)
         {
-            var resultDelSellData = await _sender.Send(new DelSellDataCommand() {Id = Id});
+            var resultDelSellData = await _sender.Send(new DelSellDataCommand() { Id = Id });
             if (resultDelSellData == 1)
             {
                 return Ok("Done");
