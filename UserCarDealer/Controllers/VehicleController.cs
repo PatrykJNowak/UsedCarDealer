@@ -69,5 +69,13 @@ namespace UserCarDealer.Controllers
                 return NotFound("Vehicle not found. Check vin");
             }
         }
+        
+        //api/DELETE
+        [HttpDelete("{vinOrId}")]
+        public async Task<ActionResult> DelVehicle([FromServices] IMediator _sender, string vinOrId)
+        {
+            var resultDelVehicle = await _sender.Send(new DelVehicleCommand() { VinOrId = vinOrId });
+            return Ok(1);
+        }
     }
 }
