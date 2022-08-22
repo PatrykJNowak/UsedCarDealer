@@ -16,7 +16,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Command\SellDataCommand" />
       <Folder Include="Controllers" />
+      <Folder Include="Handlers\SellDataHandlers\Dto" />
     </ItemGroup>
 
 </Project>
