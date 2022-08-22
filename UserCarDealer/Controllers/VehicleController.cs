@@ -20,5 +20,20 @@ namespace UserCarDealer.Controllers
             var resultGetVehicle = await _sender.Send(new GetVehicleQuery());
             return Ok(resultGetVehicle);
         }
+
+        //api/GET/{vin}
+        [HttpGet("{vin}")]
+        public async Task<ActionResult> GetVehicleById([FromServices] IMediator _sender, string vin)
+        {
+            var resultGetVehicleById = await _sender.Send(new GetVehicleByIdQuery() { vin = vin });
+            if (resultGetVehicleById != null)
+            {
+                return Ok(resultGetVehicleById);
+            }
+            else
+            {
+                return NotFound("Vehicle not found. Check vin");
+            }
+        }
     }
 }
