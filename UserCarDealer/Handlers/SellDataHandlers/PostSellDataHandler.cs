@@ -25,10 +25,10 @@ namespace UserCarDealer.Handlers.SellDataHandlers
         {
             var dbQuestForVehicle = _context.Vehicles
                 .FirstOrDefault(x => x.Id == request.PostSellDataDto.VehicleId);
-            
+
             var dbQuestForCustomer = _context.Customer
                 .FirstOrDefault(x => x.Id == request.PostSellDataDto.CustomerId);
-            
+
             if (dbQuestForCustomer != null && dbQuestForCustomer != null)
             {
                 var resultQueryToDb = _context.SellData
@@ -45,8 +45,16 @@ namespace UserCarDealer.Handlers.SellDataHandlers
                         Date = request.PostSellDataDto.Data,
                     };
 
+
+                    var ownerCounter = _context.Vehicles
+                        .FirstOrDefault(x => x.Id == request.PostSellDataDto.VehicleId);
+
+                    //increment owner counter in vehicle entity (from  ownerCounter to _context.Update
+                    ownerCounter.OwnerCount++;
+                    _context.Update(ownerCounter);
                     var result = _context.Add(newSellData);
                     await _context.SaveChangesAsync(cancellationToken);
+                    
                     return result.Entity.Id;
                 }
                 else

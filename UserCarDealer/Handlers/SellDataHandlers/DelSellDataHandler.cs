@@ -20,6 +20,12 @@ namespace UserCarDealer.Handlers.SellDataHandlers
 
             if (customerDataFromDb != null)
             {
+                var ownerCounter = _context.Vehicles
+                    .FirstOrDefault(x => x.Id == request.Id);
+
+                //decrement owner counter in vehicle db (from ownerCounter to _context.update)
+                ownerCounter.OwnerCount--;
+                _context.Update(ownerCounter);
                 _context.SellData.Remove(customerDataFromDb);
                 await _context.SaveChangesAsync(cancellationToken);
                 return 1;
