@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,22 @@ namespace UserCarDealer.Controllers
         {
             var resultGetSellData = await _sender.Send(new GetSellDataQuery());
             return Ok(resultGetSellData);
+        }
+
+        //api/GET/{vehicle:id}
+        [HttpGet("{IdOrVin}")]
+        public async Task<ActionResult> GetSellDataByVehicleIdOrVin([FromServices] IMediator _sender, string IdOrVin)
+        {
+            var resultGetSellDataByVehicleIdOrVin =
+                await _sender.Send(new GetSellDataByVehicleIdOrVinQuery() { IdOrVin = IdOrVin });
+            if (resultGetSellDataByVehicleIdOrVin != null)
+            {
+                return Ok(resultGetSellDataByVehicleIdOrVin);
+            }
+            else
+            {
+                return NotFound("Check input");
+            }
         }
 
         //api/POST
