@@ -53,5 +53,21 @@ namespace UserCarDealer.Controllers
                 return NotFound("Vehicle with same vin is already exist");
             }
         }
+
+        //api/PUT
+        [HttpPut]
+        public async Task<ActionResult> PutVehicle([FromBody] PutVehicleDto putVehicleDto,
+            [FromServices] IMediator _sender)
+        {
+            var resultPutVehicle = await _sender.Send(new PutVehicleCommand() { PutVehicleDto = putVehicleDto });
+            if (resultPutVehicle != 0)
+            {
+                return Ok("Done");
+            }
+            else
+            {
+                return NotFound("Vehicle not found. Check vin");
+            }
+        }
     }
 }
