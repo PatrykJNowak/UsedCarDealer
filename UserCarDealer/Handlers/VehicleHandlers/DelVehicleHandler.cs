@@ -3,12 +3,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using UserCarDealer.Command.VehicleCommand;
 using UserCarDealer.DataModels;
 
 namespace UserCarDealer.Handlers.VehicleHandlers
 {
-    public class DelVehicleHandler : IRequestHandler<DelVehicleCommand, int>
+    public class DelVehicleHandler : IRequestHandler<DelVehicleCommand, bool>
     {
         private readonly Context _context;
         public Context Context { get; }
@@ -19,23 +20,24 @@ namespace UserCarDealer.Handlers.VehicleHandlers
             Context = context;
         }
 
-        
-        public async Task<int> Handle(DelVehicleCommand request, CancellationToken cancellationToken)
+
+        public async Task<bool> Handle(DelVehicleCommand request, CancellationToken cancellationToken)
         {
-            var resultDelVehicle = _context.Vehicles
-                .FirstOrDefault(x => x.Vin == request.VinOrId) ?? _context.Vehicles
-                .FirstOrDefault(x => x.Id == Int32.Parse(request.VinOrId));
+            var resultDelVehicle = await _context.Vehicles
+                                       .FirstOrDefaultAsync(x => x.Vin == request.VinOrId, cancellationToken: cancellationToken) ??
+                                   (int.TryParse(request.VinOrId, out var id)
+                                       ? await _context.Vehicles
+                                           .FirstOrDefaultAsync(x => x.Id == id, cancellationToken: cancellationToken)
+                                       : await _context.Vehicles
+                                           .FirstOrDefaultAsync(x => x.Id == -999, cancellationToken: cancellationToken));
 
             if (resultDelVehicle != null)
             {
                 _context.Vehicles.Remove(resultDelVehicle);
                 await _context.SaveChangesAsync(cancellationToken);
-                return 1;
+                return true;
             }
-            else
-            {
-                return 0;
-            }
+            return false;
         }
     }
 }
