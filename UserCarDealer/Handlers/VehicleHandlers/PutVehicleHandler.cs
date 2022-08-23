@@ -2,12 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using UserCarDealer.Command.VehicleCommand;
 using UserCarDealer.DataModels;
 
 namespace UserCarDealer.Handlers.VehicleHandlers
 {
-    public class PutVehicleHandler : IRequestHandler<PutVehicleCommand, int>
+    public class PutVehicleHandler : IRequestHandler<PutVehicleCommand, bool>
     {
         private readonly Context _context;
 
@@ -18,10 +19,10 @@ namespace UserCarDealer.Handlers.VehicleHandlers
             Context = context;
         }
 
-        public async Task<int> Handle(PutVehicleCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(PutVehicleCommand request, CancellationToken cancellationToken)
         {
-            var resultPutVehicle = _context.Vehicles
-                .FirstOrDefault(x => x.Vin == request.PutVehicleDto.Vin);
+            var resultPutVehicle = await _context.Vehicles
+                .FirstOrDefaultAsync(x => x.Vin == request.PutVehicleDto.Vin, cancellationToken: cancellationToken);
 
             if (resultPutVehicle != null)
             {
@@ -33,12 +34,9 @@ namespace UserCarDealer.Handlers.VehicleHandlers
 
                 _context.Update(resultPutVehicle);
                 await _context.SaveChangesAsync(cancellationToken);
-                return 1;
+                return true;
             }
-            else
-            {
-                return 0;
-            }
+            return false;
         }
     }
 }

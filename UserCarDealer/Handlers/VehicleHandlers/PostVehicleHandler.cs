@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using UserCarDealer.Command.VehicleCommand;
 using UserCarDealer.DataModels;
 using UserCarDealer.Queries.VehicleQueries;
@@ -21,8 +22,8 @@ namespace UserCarDealer.Handlers.VehicleHandlers
 
         public async Task<int> Handle(PostVehicleCommand request, CancellationToken cancellationToken)
         {
-            var resultPostVehicleHandler = _context.Vehicles
-                .FirstOrDefault(x => x.Vin == request.PostVehicleDto.Vin);
+            var resultPostVehicleHandler = await _context.Vehicles
+                .FirstOrDefaultAsync(x => x.Vin == request.PostVehicleDto.Vin, cancellationToken: cancellationToken);
 
             if (resultPostVehicleHandler == null)
             {
@@ -41,12 +42,8 @@ namespace UserCarDealer.Handlers.VehicleHandlers
                 var results = _context.Add(newVehicle);
                 await _context.SaveChangesAsync(cancellationToken);
                 return results.Entity.Id;
-
             }
-            else
-            {
-                return 0;
-            }
+            return 0;
         }
     }
 }

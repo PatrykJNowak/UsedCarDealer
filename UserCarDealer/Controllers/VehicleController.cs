@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -17,17 +18,17 @@ namespace UserCarDealer.Controllers
     {
         //api/GET
         [HttpGet]
-        public async Task<ActionResult> GetVehicle([FromServices] IMediator _sender)
+        public async Task<ActionResult> GetVehicle([FromServices] IMediator sender)
         {
-            var resultGetVehicle = await _sender.Send(new GetVehicleQuery());
+            var resultGetVehicle = await sender.Send(new GetVehicleQuery());
             return Ok(resultGetVehicle);
         }
 
         //api/GET/{vin}
         [HttpGet("{vinOrId}")]
-        public async Task<ActionResult> GetVehicleById([FromServices] IMediator _sender, string vinOrId)
+        public async Task<ActionResult> GetVehicleById([FromServices] IMediator sender, string vinOrId)
         {
-            var resultGetVehicleById = await _sender.Send(new GetVehicleByIdQuery() { vinOrId = vinOrId });
+            var resultGetVehicleById = await sender.Send(new GetVehicleByIdQuery() { vinOrId = vinOrId });
             if (resultGetVehicleById != null)
             {
                 return Ok(resultGetVehicleById);
@@ -41,9 +42,9 @@ namespace UserCarDealer.Controllers
         //api/POST
         [HttpPost]
         public async Task<ActionResult> PostVehicle([FromBody] PostVehicleDto postVehicleDto,
-            [FromServices] IMediator _sender)
+            [FromServices] IMediator sender)
         {
-            var resultPostVehicle = await _sender.Send(new PostVehicleCommand() { PostVehicleDto = postVehicleDto });
+            var resultPostVehicle = await sender.Send(new PostVehicleCommand() { PostVehicleDto = postVehicleDto });
             if (resultPostVehicle != 0)
             {
                 return Ok("Vehicle added witch Id = " + resultPostVehicle);
@@ -57,10 +58,10 @@ namespace UserCarDealer.Controllers
         //api/PUT
         [HttpPut]
         public async Task<ActionResult> PutVehicle([FromBody] PutVehicleDto putVehicleDto,
-            [FromServices] IMediator _sender)
+            [FromServices] IMediator sender)
         {
-            var resultPutVehicle = await _sender.Send(new PutVehicleCommand() { PutVehicleDto = putVehicleDto });
-            if (resultPutVehicle != 0)
+            var resultPutVehicle = await sender.Send(new PutVehicleCommand() { PutVehicleDto = putVehicleDto });
+            if (resultPutVehicle)
             {
                 return Ok("Done");
             }
@@ -72,10 +73,17 @@ namespace UserCarDealer.Controllers
         
         //api/DELETE
         [HttpDelete("{vinOrId}")]
-        public async Task<ActionResult> DelVehicle([FromServices] IMediator _sender, string vinOrId)
+        public async Task<ActionResult> DelVehicle([FromServices] IMediator sender, string vinOrId)
         {
-            var resultDelVehicle = await _sender.Send(new DelVehicleCommand() { VinOrId = vinOrId });
-            return Ok(1);
+            var resultDelVehicle = await sender.Send(new DelVehicleCommand() { VinOrId = vinOrId });
+            if (resultDelVehicle)
+            {
+                return Ok("Done");
+            }
+            else
+            {
+                return NotFound("Check input");
+            }
         }
     }
 }

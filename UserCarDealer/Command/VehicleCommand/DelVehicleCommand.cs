@@ -2,7 +2,7 @@
 
 namespace UserCarDealer.Command.VehicleCommand
 {
-    public class DelVehicleCommand : IRequest<int>
+    public class DelVehicleCommand : IRequest<bool>
     {
         public string VinOrId { get; set; }
     }

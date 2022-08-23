@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using UserCarDealer.DataModels;
 using UserCarDealer.Queries.VehicleQueries;
 
@@ -16,16 +17,13 @@ namespace UserCarDealer.Handlers.VehicleHandlers
 
         public async Task<Vehicle> Handle(GetVehicleByIdQuery request, CancellationToken cancellationToken)
         {
-            var resultGetVahicleById = _context.Vehicles
-                .FirstOrDefault(x => x.Vin == request.vinOrId);
-
-            if (resultGetVahicleById == null)
-            {
-                return _context.Vehicles
-                    .FirstOrDefault(x => x.Id == Int32.Parse(request.vinOrId));
-            }
-            
-            return resultGetVahicleById;
+            return await  _context.Vehicles
+                       .FirstOrDefaultAsync(x => x.Vin == request.vinOrId, cancellationToken: cancellationToken) ??
+                   (int.TryParse(request.vinOrId, out var id)
+                       ? await _context.Vehicles
+                           .FirstOrDefaultAsync(x => x.Id == id, cancellationToken: cancellationToken)
+                       : await _context.Vehicles
+                           .FirstOrDefaultAsync(x => x.Id == -999, cancellationToken: cancellationToken));
         }
     }
 }
