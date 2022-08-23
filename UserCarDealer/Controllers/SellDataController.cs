@@ -63,7 +63,14 @@ namespace UserCarDealer.Controllers
         {
             var resultSellDataPost =
                 await _sender.Send(new PostSellDataCommand() { PostSellDataDto = postSellDataDto });
-            return Ok(resultSellDataPost);
+            if (resultSellDataPost != 0)
+            {
+                return Ok("Id: " + resultSellDataPost);
+            }
+            else
+            {
+                return NotFound("Invalid input");
+            }
         }
 
         //api/PUT

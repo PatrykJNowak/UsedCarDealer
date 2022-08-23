@@ -9,7 +9,8 @@ using UserCarDealer.Queries.SellDataQueries;
 
 namespace UserCarDealer.Handlers.SellDataHandlers
 {
-    public class GetSellDataByVehicleIdOrVinHandler : IRequestHandler<GetSellDataByVehicleIdOrVinQuery, IEnumerable<SellData>>
+    public class
+        GetSellDataByVehicleIdOrVinHandler : IRequestHandler<GetSellDataByVehicleIdOrVinQuery, IEnumerable<SellData>>
     {
         private readonly Context _context;
 
@@ -22,11 +23,18 @@ namespace UserCarDealer.Handlers.SellDataHandlers
                 .FirstOrDefault(x => x.Vin == request.IdOrVin) ?? _context.Vehicles
                 .FirstOrDefault(x => x.Id == Int32.Parse(request.IdOrVin));
 
-            var withOneFromDb = _context.SellData
-                .Where(x => x.Id == getVehicle.Id)
-                .ToList();
+            if (getVehicle != null)
+            {
+                var withOneFromDb = _context.SellData
+                    .Where(x => x.Id == getVehicle.Id)
+                    .ToList();
 
-            return withOneFromDb;
+                return withOneFromDb;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

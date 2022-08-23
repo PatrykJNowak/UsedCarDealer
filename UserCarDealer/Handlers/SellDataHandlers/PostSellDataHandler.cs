@@ -51,6 +51,7 @@ namespace UserCarDealer.Handlers.SellDataHandlers
 
                     //increment owner counter in vehicle entity (from  ownerCounter to _context.Update
                     ownerCounter.OwnerCount++;
+                    ownerCounter.IsAvailable = false;
                     _context.Update(ownerCounter);
                     var result = _context.Add(newSellData);
                     await _context.SaveChangesAsync(cancellationToken);

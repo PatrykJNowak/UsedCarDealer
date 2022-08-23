@@ -25,7 +25,7 @@ namespace UserCarDealer.Handlers.CustomerHandlers
 
             if (customerDataFromDb != null)
             {
-                customerDataFromDb.Name = request.PutCustomerDto.SurName;
+                customerDataFromDb.Name = request.PutCustomerDto.Name;
                 customerDataFromDb.SurName = request.PutCustomerDto.SurName;
 
                 _context.Customer.Update(customerDataFromDb);

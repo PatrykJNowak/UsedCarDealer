@@ -26,13 +26,19 @@ namespace UserCarDealer.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
 
                     b.Property<string>("PresonalId")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
 
                     b.Property<string>("SurName")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.HasKey("Id");
 
@@ -50,6 +56,7 @@ namespace UserCarDealer.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Date")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("VehicleId")
@@ -72,27 +79,36 @@ namespace UserCarDealer.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Brand")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Color")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<int>("Course")
+                        .HasMaxLength(4)
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Model")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
 
                     b.Property<int>("OwnerCount")
                         .HasColumnType("integer");
 
                     b.Property<string>("Vin")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
 
                     b.Property<int>("YearOfProduction")
+                        .HasMaxLength(10)
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
