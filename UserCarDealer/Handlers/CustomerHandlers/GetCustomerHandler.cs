@@ -16,7 +16,6 @@ namespace UserCarDealer.Handlers.CustomerHandlers
         public GetCustomerHandler(Context context)
         {
             _context = context;
-            context = _context;
         }
 
         public async Task<IEnumerable<Customer>> Handle(GetCustomerQuery request, CancellationToken cancellationToken)

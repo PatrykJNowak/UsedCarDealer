@@ -14,7 +14,6 @@ namespace UserCarDealer.Handlers.VehicleHandlers
         public GetVehicleHandler(Context context)
         {
             _context = context;
-            context = _context;
         }
         public async Task<IEnumerable<Vehicle>> Handle(GetVehicleQuery request, CancellationToken cancellationToken)
         {

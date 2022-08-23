@@ -11,10 +11,8 @@ namespace UserCarDealer.Handlers.SellDataHandlers
     public class GetSellDataHandler : IRequestHandler<GetSellDataQuery, IEnumerable<SellData>>
     {
         private readonly Context _context;
-        public GetSellDataHandler(Context context)
-        {
-            _context = context;
-        }
+        public GetSellDataHandler(Context context) => _context = context;
+
         public async Task<IEnumerable<SellData>> Handle(GetSellDataQuery request, CancellationToken cancellationToken)
         {
             var result = _context.SellData
