@@ -14,6 +14,5 @@ namespace UserCarDealer.DataModels
         [Required][MaxLength(15)]
         public string PresonalId { get; set; }
         public ICollection<SellData> SellDataId { get; set; }
-
     }
 }

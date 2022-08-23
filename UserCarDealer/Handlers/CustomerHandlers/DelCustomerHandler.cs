@@ -8,14 +8,13 @@ using UserCarDealer.DataModels;
 
 namespace UserCarDealer.Handlers.CustomerHandlers
 {
-    public class DelCustomerHandler : IRequestHandler<DelCustomerCommand, int>
+    public class DelCustomerHandler : IRequestHandler<DelCustomerCommand, bool>
     {
         private readonly Context _context;
         public DelCustomerHandler(Context context) => _context = context;
-    
-        public async Task<int> Handle(DelCustomerCommand request, CancellationToken cancellationToken)
+
+        public async Task<bool> Handle(DelCustomerCommand request, CancellationToken cancellationToken)
         {
-    
             var customerDataFromDb = _context.Customer
                 .FirstOrDefault(x => x.PresonalId == request.PersonalId);
 
@@ -23,17 +22,9 @@ namespace UserCarDealer.Handlers.CustomerHandlers
             {
                 _context.Customer.Remove(customerDataFromDb);
                 await _context.SaveChangesAsync(cancellationToken);
-                return 1;
+                return true;
             }
-            else
-            {
-                return 0;
-            }
-            
-            
-            // var result = _context.SellData.Remove();
-            // await _context.SaveChangesAsync(cancellationToken);
-            // return result.Entity.Id;
+            return false;
         }
     }
 }

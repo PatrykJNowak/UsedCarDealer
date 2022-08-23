@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using UserCarDealer.DataModels;
 using UserCarDealer.Queries.CustomerQueries;
 
@@ -14,10 +15,8 @@ namespace UserCarDealer.Handlers.CustomerHandlers
 
         public async Task<Customer> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
         {
-            var resultsGetCustomerById = _context.Customer
-                .FirstOrDefault(x => x.Id == request.Id);
-
-            return resultsGetCustomerById;
+            return await _context.Customer
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken: cancellationToken);
         }
     }
 }

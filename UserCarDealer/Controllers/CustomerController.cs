@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -18,34 +19,34 @@ namespace UserCarDealer.Controllers
     {
         //api/GET
         [HttpGet]
-        public async Task<ActionResult> GetCustomer([FromServices] IMediator _sender)
+        public async Task<ActionResult> GetCustomer([FromServices] IMediator sender)
         {
-            var resultsGetCustomer = await _sender.Send(new GetCustomerQuery());
+            var resultsGetCustomer = await sender.Send(new GetCustomerQuery());
             return Ok(resultsGetCustomer);
         }
 
         //api/GET/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetCustomerById([FromServices] IMediator _sender, int id)
+        public async Task<ActionResult> GetCustomerById([FromServices] IMediator sender, int id)
         {
-            var resultGetCustomerById = await _sender.Send(new GetCustomerByIdQuery() { Id = id });
+            var resultGetCustomerById = await sender.Send(new GetCustomerByIdQuery() { Id = id });
             if (resultGetCustomerById != null)
             {
                 return Ok(resultGetCustomerById);
             }
             else
             {
-                return NotFound("Custumer not found. Check customer Id");
+                return NotFound("Customer not found. Check customer Id");
             }
         }
 
         //api/POST
         [HttpPost]
         public async Task<ActionResult> PostCustomer([FromBody] PostCustomerDto postCustomerDto,
-            [FromServices] IMediator _sender)
+            [FromServices] IMediator sender)
         {
             var restulPostCustomer =
-                await _sender.Send(new PostCustomerCommand() { PostCustomerDto = postCustomerDto });
+                await sender.Send(new PostCustomerCommand() { PostCustomerDto = postCustomerDto });
             if (restulPostCustomer != 0)
             {
                 return Ok("User added. Id = " + restulPostCustomer);
@@ -59,9 +60,9 @@ namespace UserCarDealer.Controllers
         //api/PUT
         [HttpPut]
         public async Task<ActionResult> PutCustomer([FromBody] PutCustomerDto putCustomerDto,
-            [FromServices] IMediator _sender)
+            [FromServices] IMediator sender)
         {
-            var resultPutCustomer = await _sender.Send(new PutCustomerCommand() { PutCustomerDto = putCustomerDto });
+            var resultPutCustomer = await sender.Send(new PutCustomerCommand() { PutCustomerDto = putCustomerDto });
             if (resultPutCustomer == 1)
             {
                 return Ok("Customer updated");
@@ -74,10 +75,17 @@ namespace UserCarDealer.Controllers
 
         //api/DELETE/{id}
         [HttpDelete("{personalId}")]
-        public async Task<ActionResult<int>> DelCustomer([FromServices] IMediator _sender, string personalId)
+        public async Task<ActionResult<int>> DelCustomer([FromServices] IMediator sender, string personalId)
         {
-            var resultDelCustomer = await _sender.Send(new DelCustomerCommand() { PersonalId = personalId });
-            return Ok("Done");
+            var resultDelCustomer = await sender.Send(new DelCustomerCommand() { PersonalId = personalId });
+            if (resultDelCustomer)
+            {
+                return Ok("Done");
+            }
+            else
+            {
+                return NotFound("Check input");
+            }
         }
     }
 }

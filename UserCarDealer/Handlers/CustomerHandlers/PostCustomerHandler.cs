@@ -18,13 +18,12 @@ namespace UserCarDealer.Handlers.CustomerHandlers
             _context = context;
             Context = context;
         }
-        
+
         public async Task<int> Handle(PostCustomerCommand request, CancellationToken cancellationToken)
         {
             var validPostUser = _context.Customer
                 .FirstOrDefault(x => x.PresonalId == request.PostCustomerDto.PresonalId);
-            
-            
+
             if (validPostUser == null)
             {
                 var postCustomer = new Customer()
@@ -36,12 +35,9 @@ namespace UserCarDealer.Handlers.CustomerHandlers
 
                 var result = _context.Customer.Add(postCustomer);
                 await _context.SaveChangesAsync(cancellationToken);
-                return result.Entity.Id;           
+                return result.Entity.Id;
             }
-            else
-            {
-                return 0;
-            }
+            return 0;
         }
     }
 }

@@ -32,10 +32,7 @@ namespace UserCarDealer.Handlers.CustomerHandlers
                 await _context.SaveChangesAsync(cancellationToken);
                 return 1;
             }
-            else
-            {
-                return 0;
-            }
+            return 0;
         }
     }
 }
